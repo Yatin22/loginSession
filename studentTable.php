@@ -13,16 +13,32 @@ function fetchTableRows($conn, $offset, $records_per_page, $filters)
 {
     $query = "SELECT * FROM student";
 
-$filter=true;
+    $params = array(); // Store parameters for prepared statement
+
     if (!empty($filters)) {
-        $filter=false;
         $query .= " WHERE " . implode(" AND ", $filters);
-    }else{
-        $filter=true;
+
+        // Extract and store parameters for prepared statement
+        foreach ($filters as $filter) {
+            preg_match('/\?/', $filter, $matches, PREG_OFFSET_CAPTURE);
+            if (count($matches) > 0) {
+                $paramValue = substr($filter, $matches[0][1] + 1);
+                $params[] = $paramValue;
+            }
+        }
     }
 
     $query .= " LIMIT $offset, $records_per_page";
-    $result = mysqli_query($conn, $query);
+
+    // Use prepared statement for executing the query
+    $stmt = $conn->prepare($query);
+    if (!empty($params)) {
+        $stmt->bind_param(str_repeat('s', count($params)), ...$params);
+    }
+    $stmt->execute();
+
+    // Fetch the results
+    $result = $stmt->get_result();
 
     $tableRows = '';
     while ($row = mysqli_fetch_assoc($result)) {
@@ -42,18 +58,18 @@ $filter=true;
         $id = $row['student_id'];
         $tableRows .= "<tr>";
         $tableRows .= "<td>" . $row['student_id'] . "</td>";
-        $tableRows .= "<td>" . $row['student_name'] . "</td>";
-        $tableRows .= "<td>" . $row['father_name'] . "</td>";
-        $tableRows .= "<td>" . $row['phone'] . "</td>";
-        $tableRows .= "<td>" . $row['email'] . "</td>";
-        $tableRows .= "<td>" . $row['class'] . "</td>";
-        $tableRows .= "<td>" . $row['gender'] . "</td>";
-        $tableRows .= "<td>" . $row['note'] . "</td>";
-        $tableRows .= "<td>" . $row['date_of_birth'] . "</td>";
-        $tableRows .= "<td>" . $row['created_time'] . "</td>";
-        $tableRows .= "<td>" . $updateTime . "</td>";
-        $tableRows .= "<td>" . $status . "</td>";
-        $tableRows .= "<td>" . $row['created_by'] . "</td>";
+        $tableRows .= "<td>" . htmlspecialchars($row['student_name']) . "</td>";
+        $tableRows .= "<td>" . htmlspecialchars($row['father_name']) . "</td>";
+        $tableRows .= "<td>" . htmlspecialchars($row['phone']) . "</td>";
+        $tableRows .= "<td>" . htmlspecialchars($row['email']) . "</td>";
+        $tableRows .= "<td>" . htmlspecialchars($row['class']) . "</td>";
+        $tableRows .= "<td>" . htmlspecialchars($row['gender']) . "</td>";
+        $tableRows .= "<td>" . htmlspecialchars($row['note']) . "</td>";
+        $tableRows .= "<td>" . htmlspecialchars($row['date_of_birth']) . "</td>";
+        $tableRows .= "<td>" . htmlspecialchars($row['created_time']) . "</td>";
+        $tableRows .= "<td>" . htmlspecialchars($updateTime) . "</td>";
+        $tableRows .= "<td>" . htmlspecialchars($status) . "</td>";
+        $tableRows .= "<td>" . htmlspecialchars($row['created_by']) . "</td>";
         $tableRows .= "<td style='display: flex !important;, border-radius:30px; min-height:90px;align-items:center'>";
         if ($update) {
             $tableRows .= " <a href='studentUpdate.php?id=$id'><button class='btn btn-primary'>Update</button></a>";
@@ -67,6 +83,7 @@ $filter=true;
     }
 
     mysqli_free_result($result);
+    $stmt->close();
 
     return $tableRows;
 }
@@ -78,27 +95,27 @@ $offset = ($current_page - 1) * $records_per_page;
 $filters = array();
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     if (!empty($_POST['filter-name'])) {
-        $filters[] = "student_name LIKE '%" . $_POST['filter-name'] . "%'";
+        $filters[] = "student_name LIKE ?";
     }
 
     if (!empty($_POST['filter-phone'])) {
-        $filters[] = "phone LIKE '%" . $_POST['filter-phone'] . "%'";
+        $filters[] = "phone LIKE ?";
     }
 
     if (!empty($_POST['filter-email'])) {
-        $filters[] = "email LIKE '%" . $_POST['filter-email'] . "%'";
+        $filters[] = "email LIKE ?";
     }
 
     if (!empty($_POST['filter-class'])) {
-        $filters[] = "class = '" . $_POST['filter-class'] . "'";
+        $filters[] = "class = ?";
     }
 
     if (!empty($_POST['filter-gender'])) {
-        $filters[] = "gender = '" . $_POST['filter-gender'] . "'";
+        $filters[] = "gender = ?";
     }
 
     if (!empty($_POST['filter-dob'])) {
-        $filters[] = "date_of_birth = '" . $_POST['filter-dob'] . "'";
+        $filters[] = "date_of_birth = ?";
     }
 
     // Handle status filter (Active, Inactive, or All)
@@ -114,7 +131,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
 $tableRows = fetchTableRows($conn, $offset, $records_per_page, $filters);
 ?>
-
 <a href="userPage.php">
     <button class="btn-my-profile">My Profile</button>
 </a>
