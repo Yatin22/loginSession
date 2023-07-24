@@ -1,44 +1,95 @@
+/* style.css */
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .container {
-    max-width: 400px;
-    margin: 40px auto;
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 5px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  h1 {
-    text-align: center;
-  }
-  
-  .user-info {
-    margin-top: 20px;
-  }
-  
-  .actions {
-    text-align: center;
-    margin-top: 30px;
-  }
-  
-  button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-right: 10px;
-  }
-  
-  button:hover {
-    background-color: #45a049;
-  }
-  
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+}
+
+.user-info {
+  margin-top: 30px;
+}
+
+.user-info p {
+  margin: 10px 0;
+}
+
+.actions {
+  margin-top: 30px;
+  text-align: center;
+}
+
+button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+input[type="file"] + label {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+input[type="file"] + label:hover {
+  background-color: #0056b3;
+}
+
+/* Hide default file input appearance and show selected file name */
+input[type="file"] + label + span {
+  display: inline-block;
+  margin-left: 10px;
+}
+
+/* Customize appearance for selected file name */
+input[type="file"] + label + span::before {
+  content: "Selected file: ";
+}
+
+/* Show selected file name next to the button */
+input[type="file"]:not([disabled]) + label + span::after {
+  content: attr(data-file-name);
+}
+
+/* Hide selected file name if no file is selected */
+input[type="file"][disabled] + label + span::after {
+  content: "No file selected";
+}
+

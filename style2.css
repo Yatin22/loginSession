@@ -1,0 +1,152 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+  
+  h1 {
+    text-align: center;
+    color: #2c3e50;
+  }
+  
+  .filters {
+    margin-bottom: 20px;
+  }
+  
+  .filters label {
+    margin-right: 10px;
+    font-weight: bold;
+  }
+  
+  .filters input,
+  .filters select {
+    margin-right: 20px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .filters button {
+    padding: 8px 16px;
+    margin: 4px;
+    cursor: pointer;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+  }
+  
+  .table-container {
+    overflow-x: auto;
+    margin-top: 20px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  
+  .add-button-container {
+    text-align: left;
+    margin-top: 20px;
+  }
+  
+  .btn-add {
+    padding: 8px 16px;
+    cursor: pointer;
+    background-color: #27ae60;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+  }
+  
+  .add-student-form {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+  
+  .add-student-form label,
+  .add-student-form input,
+  .add-student-form select,
+  .add-student-form textarea {
+    display: block;
+    margin: 8px 0;
+  }
+  
+  .add-student-form button {
+    margin-top: 10px;
+  }
+  
+  .pagination {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .pagination button {
+    padding: 8px 16px;
+    cursor: pointer;
+    background-color: #34495e;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+  }
+  
+  .pagination span {
+    padding: 0 8px;
+    font-weight: bold;
+    color: #2c3e50;
+  }
+  /* Rest of the CSS styles as before */
+
+.btn-my-profile {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 8px 12px;
+    cursor: pointer;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+  }
+  
+  .btn-my-profile:hover {
+    background-color: #2980b9;
+  }
+
+  .pagination {
+    margin-top: 20px;
+}
+
+.pagination a {
+    display: inline-block;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: #007bff;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+
+.pagination a.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.pagination a:hover {
+    background-color: #f2f2f2;
+}
+a .btn , .btn{
+    min-height: 30px !important;
+    
+}
