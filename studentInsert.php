@@ -59,21 +59,21 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
   <h1>Add Student</h1>
 
   <form class="add-student-form" method="POST" onsubmit="return validateForm()">
-    <label for="student-name">Student Name:</label>
+    <label for="student-name">Student Name(required):</label>
     <input type="text" name="student_name" id="student-name" required>
 
-    <label for="father-name">Father Name:</label>
+    <label for="father-name">Father Name(required):</label>
     <input type="text" name="father_name" id="father-name" required>
 
-    <label for="phone">Phone:</label>
+    <label for="phone">Phone(required):</label>
     <input type="tel" name="phone" minlength="10" maxlength="10" id="phone" required>
 
-    <label for="email">Email:</label>
+    <label for="email">Email(required):</label>
     <input type="email" 
     pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" 
     name="email" id="email" required>
 
-    <label for="class">Class:</label>
+    <label for="class">Class(required):</label>
     <select id="class" name="class" required>
       <option value="">Select Class</option>
       <option value="1">Class 1</option>
@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     </select>
 
     <div class="gender-container">
-      <label for="gender">Gender:</label>
+      <label for="gender">Gender(required):</label>
       <div class="gender-radio">
         <input type="radio" id="male" name="gender" value="M" required>
         <label for="male">Male</label>
@@ -103,17 +103,17 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     <label for="notes">Note:</label>
     <textarea id="notes" name="notes"></textarea>
 
-    <label for="dob">Date of Birth:</label>
+    <label for="dob">Date of Birth(required):</label>
     <input type="date" max="<?php echo date("Y-m-d");
     ?>"id="dob" name="dob" required>
 
-    <label for="status">Status:</label>
+    <label for="status">Status(required):</label>
     <select id="status" name="status" required>
       <option value="1">Active</option>
       <option value="0">Inactive</option>
     </select>
     <div style="display:flex">
-        <label for="terms">I agree to the Terms and Conditions:</label>
+        <label for="terms">I agree to the Terms and Conditions(required):</label>
     <input type="checkbox" id="terms" name="terms" required>
 
     </div>
@@ -124,34 +124,59 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
   <a href="studentTable.php" class="back-link">Back to Student Information</a>
 
-  <script >
+  <script>
+function validateForm() {
+  const studentName = document.getElementById("student-name").value.trim();
+  const fatherName = document.getElementById("father-name").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const classSelect = document.getElementById("class").value;
+  const genderMale = document.getElementById("male").checked;
+  const genderFemale = document.getElementById("female").checked;
+  const dob = document.getElementById("dob").value;
+  const termsCheckbox = document.getElementById("terms");
 
-    function validateForm(){
-        const studentName = document.getElementById("student-name").value.trim();
-    const fatherName = document.getElementById("father-name").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const classSelect = document.getElementById("class").value;
-    const genderMale = document.getElementById("male").checked;
-    const genderFemale = document.getElementById("female").checked;
-    const dob = document.getElementById("dob").value;
-    const termsCheckbox = document.getElementById("terms");
   if (!termsCheckbox.checked) {
     alert("Please agree to the Terms and Conditions.");
     return false;
   }
-    // Check if the required fields are empty
-    if (studentName === "" || fatherName === "" || phone === "" || email === "" || classSelect === "" || dob === "" || !(genderMale || genderFemale)) {
-      alert("Please fill in all the required fields.");
-      return false;
-    }
 
-    // Check if the phone number contains only numbers
-    if (!/^\d+$/.test(phone)) {
-      alert("Phone number must contain only numbers.");
-      return false;
-    }
-    }
-  </script>
+  if (studentName === "" || fatherName === "" || phone === "" || email === "" || classSelect === "" || dob === "") {
+    alert("Please fill in all the required fields.");
+    return false;
+  }
+
+  // Check if the student name and father name contain only alphabets and spaces
+  if (!/^[a-zA-Z\s]+$/.test(studentName) || !/^[a-zA-Z\s]+$/.test(fatherName)) {
+    alert("Student name and father name must contain only alphabets and spaces.");
+    return false;
+  }
+
+  // Check if the phone number contains exactly 10 digits
+  if (!/^\d{10}$/.test(phone)) {
+    alert("Phone number must contain exactly 10 digits.");
+    return false;
+  }
+
+  // Check if either Male or Female is selected
+  if (!(genderMale || genderFemale)) {
+    alert("Please select a gender.");
+    return false;
+  }
+  if (!/^[a-zA-Z0-9._\-@\s]+$/.test(email)) {
+    alert("Email contains invalid characters.");
+    return false;
+  }
+  
+
+  // Check if the DOB is not in the future
+  const currentDate = new Date().toISOString().split("T")[0];
+  if (dob > currentDate) {
+    alert("Date of Birth cannot be in the future.");
+    return false;
+  }
+}
+</script>
+
 </body>
 </html>
